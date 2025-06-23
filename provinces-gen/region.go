@@ -33,6 +33,20 @@ func (g *ProvincesMapGenerator) growRegionInto(regionId, x, y int) {
 	g.Map[x][y].setAsProvince(regionId)
 }
 
+func (g *ProvincesMapGenerator) doesRegionBorderMap(regionId int) bool {
+	for x := range g.Width {
+		if g.tileAt(x, 0).belongsToProvince(regionId) || g.tileAt(x, g.Height-1).belongsToProvince(regionId) {
+			return true
+		}
+	}
+	for y := range g.Height {
+		if g.tileAt(0, y).belongsToProvince(regionId) || g.tileAt(g.Width-1, y).belongsToProvince(regionId) {
+			return true
+		}
+	}
+	return false
+}
+
 func (g *ProvincesMapGenerator) fillRegionWithWater(regionId int) {
 	for x := range g.Width {
 		for y := range g.Height {
@@ -70,7 +84,7 @@ func (g *ProvincesMapGenerator) isRegionAdjacentToWater(thisRegionId int) bool {
 	return false
 }
 
-func (g *ProvincesMapGenerator) areRegionsAdjacent(thisRegionId int, otherRegionId int) bool {
+func (g *ProvincesMapGenerator) AreRegionsAdjacent(thisRegionId int, otherRegionId int) bool {
 	for x := range g.Width {
 		for y := range g.Height {
 			if g.tileAt(x, y).belongsToProvince(thisRegionId) && g.isTileAdjacentToProvince(x, y, otherRegionId) {

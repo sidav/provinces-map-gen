@@ -36,6 +36,12 @@ func (g *ProvincesMapGenerator) Init() {
 	}
 	g.Regions = nil
 	g.placeSeeds()
+	g.makeVoronoiRegions()
+	for i := range g.Regions {
+		if g.doesRegionBorderMap(i) {
+			g.fillRegionWithWater(i)
+		}
+	}
 }
 
 func (g *ProvincesMapGenerator) Generate() {

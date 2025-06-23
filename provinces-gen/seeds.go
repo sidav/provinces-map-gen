@@ -10,7 +10,7 @@ import (
 const maxSeedPlacementTries = 1000
 
 func (g *ProvincesMapGenerator) placeSeeds() {
-	g.placeBorderingWaterSeeds()
+	// g.placeBorderingWaterSeeds()
 	maxSeedsPlaced := 0 // Needed for debug info.
 	currTry := 0
 
@@ -63,7 +63,7 @@ func (g *ProvincesMapGenerator) placeSeeds() {
 
 // Places seeds to grow water border on map perimeter. Ignores usual seed distances.
 func (g *ProvincesMapGenerator) placeBorderingWaterSeeds() {
-	const meanMargin = 5
+	const meanMargin = 10
 	randOffset := rand.Intn(meanMargin)
 	for x := range g.Width {
 		for y := range g.Height {
@@ -77,10 +77,11 @@ func (g *ProvincesMapGenerator) placeBorderingWaterSeeds() {
 
 var minDistBetweenSeeds = -1
 func (g *ProvincesMapGenerator) areCoordsGoodForSeed(x, y int, plannedSeeds []weightedCoordinate) bool {
-	// borderOffset := min(g.Width, g.Height)/5
-	// if x < borderOffset || x >= g.Width - borderOffset || y < borderOffset || y >= g.Height - borderOffset {
-	// 	return false
-	// }
+	partForBorderOffset := 20
+	borderOffset := (min(g.Width, g.Height) + partForBorderOffset / 2) /partForBorderOffset
+	if x < borderOffset || x >= g.Width - borderOffset || y < borderOffset || y >= g.Height - borderOffset {
+		return false
+	}
 	if g.Map[x][y].TileType != TtypeEmpty {
 		return false
 	}
@@ -89,7 +90,7 @@ func (g *ProvincesMapGenerator) areCoordsGoodForSeed(x, y int, plannedSeeds []we
 		minDistBetweenSeeds = int(1.6 * provinceRadius)
 	}
 	// Check against existing seeds
-	const minDistToWater = 4
+	const minDistToWater = 7
 	for _, as := range g.Regions {
 		if as.IsWaterRegion && as.SeedCoords.approxDistTo(x, y) < minDistToWater {
 			return false

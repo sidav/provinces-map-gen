@@ -18,6 +18,10 @@ func (c *weightedCoordinate) approxDistTo(x, y int) int {
 	return calculations.GetApproxDistFromTo(c.X, c.Y, x, y)
 }
 
+func (c *weightedCoordinate) sqDistTo(x, y int) int {
+	return (c.X-x)*(c.X-x) + (c.Y-y)*(c.Y-y)
+}
+
 func (g *ProvincesMapGenerator) SelectRandomMapCoordsByWeight(wghtFunc func(x, y int) int) *weightedCoordinate {
 	var candidates []weightedCoordinate
 	for x := range g.Width {
@@ -31,7 +35,7 @@ func (g *ProvincesMapGenerator) SelectRandomMapCoordsByWeight(wghtFunc func(x, y
 	if len(candidates) == 0 {
 		return nil
 	}
-	index := weightedRand(0, len(candidates)-1, func(index int) int {return candidates[index].weight})
+	index := weightedRand(0, len(candidates)-1, func(index int) int { return candidates[index].weight })
 	return &candidates[index]
 }
 
@@ -50,6 +54,6 @@ func (g *ProvincesMapGenerator) SelectRandomMapCoordsByFloatWeight(wghtFunc func
 	if len(candidates) == 0 {
 		return nil
 	}
-	index := weightedRandFloat(0, len(candidates)-1, func(index int) float64 {return floatWeights[index]})
+	index := weightedRandFloat(0, len(candidates)-1, func(index int) float64 { return floatWeights[index] })
 	return &candidates[index]
 }

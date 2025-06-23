@@ -11,7 +11,7 @@ func (g *ProvincesMapGenerator) WallBetweenTwoRandomRegions() {
 		return 1
 	})
 	id2 := weightedRand(0, len(g.Regions)-1, func(index int) int {
-		if g.getRegionById(index).IsWaterRegion || index == id1 || !g.areRegionsAdjacent(id1, index) {
+		if g.getRegionById(index).IsWaterRegion || index == id1 || !g.AreRegionsAdjacent(id1, index) {
 			return 0
 		}
 		if g.countRegionsAdjacentToRegion(index) < 2 {
